@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hegin Haokip Software</title>
 <meta name="description" content="Offline management software for schools, churches, coaching institutes and any organisation. Free 30-day trial. Call or WhatsApp Hegin Haokip: +91 96123 38375.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%2312352f%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2245%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2238%22%20fill%3D%22%23f3f5f2%22%3EH%3C/text%3E%3Crect%20x%3D%2214%22%20y%3D%2250%22%20width%3D%2236%22%20height%3D%224%22%20rx%3D%222%22%20fill%3D%22%23e0a526%22/%3E%3C/svg%3E" type="image/svg+xml">
 <meta property="og:title" content="Hegin Haokip Software">
 <meta property="og:description" content="Offline management software for schools, churches, coaching institutes and any organisation. Free 30-day trial.">
 <meta property="og:type" content="website">
@@ -242,8 +242,9 @@ section.block{padding:100px 0}
 .step p{font-size:15.5px;color:var(--muted)}
 
 /* clients */
-.clients{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-@media (max-width:1000px){.clients{grid-template-columns:1fr 1fr}}
+.clients{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.client.invite{text-decoration:none;color:inherit;border:1.5px dashed var(--accent);background:color-mix(in srgb,var(--accent) 6%, var(--card))}
+.client.invite .ini{background:var(--accent);color:var(--accent-ink);font-size:28px}
 @media (max-width:760px){.clients{grid-template-columns:1fr}}
 .client{padding:30px;border:1px solid var(--rule);border-radius:18px;background:var(--card);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px}
 .client .top{display:flex;gap:16px;align-items:center}
@@ -575,7 +576,7 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
         <div>
           <div class="ver"><span>Student &amp; Hostel</span><span>Runs in the browser</span><span>Windows &amp; Mac</span></div>
           <h3>School Management Software</h3>
-          <p>Keep every student's record in one place, including the boarders in your hostel. Built for Mt Calvary.</p>
+          <p>Keep every student's record in one place, including the boarders in your hostel. Ready for day schools and boarding schools.</p>
           <ul class="flist">
             <li><svg><use href="#i-check"/></svg><div><b>Student management</b><span>All student details in one register</span></div></li>
             <li><svg><use href="#i-check"/></svg><div><b>Hostel management</b><span>Keep track of boarding students</span></div></li>
@@ -607,7 +608,7 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
         <div>
           <div class="ver"><span>SQLite Pro Edition</span><span>Windows &amp; Mac</span></div>
           <h3>Coaching Institute Management</h3>
-          <p>Offline software for running a coaching institute, built for and in daily use at Gunchu Coaching Institute.</p>
+          <p>Offline software for running a coaching institute, already in daily use.</p>
           <ul class="flist">
             <li><svg><use href="#i-check"/></svg><div><b>One-click start</b><span>Opens from a single icon</span></div></li>
             <li><svg><use href="#i-check"/></svg><div><b>Reliable database</b><span>Fast, tested and safe</span></div></li>
@@ -622,7 +623,7 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
           <div class="vcard">
             <div class="vh">Starting your software <span>offline</span></div>
             <div class="launch">
-              <div class="icon">GCI</div>
+              <div class="icon">CI</div>
               <b>Coaching Institute Manager</b>
               <p>Double-click the icon on your desktop</p>
               <div class="prog"><i></i></div>
@@ -699,16 +700,11 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
           <p>Member register, departments, events, certificates, transfers and date-range reports, with an illustrated user manual.</p>
           <div class="chips"><span>Members</span><span>Certificates</span><span>Departments</span><span>Reports</span></div>
         </div>
-        <div class="client">
-          <div class="top"><div class="ini">GC</div><div><h3>Gunchu Coaching Institute</h3><div class="type">Education · Institute Management</div></div></div>
-          <p>Offline institute management software, made reliable, tested and delivered for daily use.</p>
-          <div class="chips"><span>Offline</span><span>One-click start</span><span>Custom branding</span></div>
-        </div>
-        <div class="client">
-          <div class="top"><div class="ini">MC</div><div><h3>Mt Calvary</h3><div class="type">School · Student &amp; Hostel Management</div></div></div>
-          <p>Student management software with hostel records, running offline in the browser.</p>
-          <div class="chips"><span>Students</span><span>Hostel</span><span>Offline</span></div>
-        </div>
+        <a class="client invite" href="#contact" data-product="Custom software">
+          <div class="top"><div class="ini">+</div><div><h3>Your organisation next</h3><div class="type">School · Institute · Office · NGO · Business</div></div></div>
+          <p>Get the same kind of software set up with your own name, logo and records. Start with a 30-day free trial.</p>
+          <div class="chips"><span>Free trial</span><span>Custom features</span><span>Setup &amp; support</span></div>
+        </a>
       </div>
     </div>
   </section>
