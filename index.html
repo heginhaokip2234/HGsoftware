@@ -403,6 +403,50 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
   .ticker{white-space:normal}
 }
 
+
+/* ================= ROUND 3: richer looks ================= */
+#heroDots{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55}
+.hero-grid{z-index:1}
+.hero h1{font-size:clamp(40px,5.4vw,70px)}
+.rot-wrap{display:inline-block;position:relative}
+.rot{font-style:normal;background:linear-gradient(90deg,#f6c453,#e2a72a 40%,#7fd3a5);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;transition:opacity .35s ease, transform .35s ease, filter .35s}
+.rot.out{opacity:0;transform:translateY(-.35em);filter:blur(4px)}
+.rot.pre{opacity:0;transform:translateY(.35em);filter:blur(4px);transition:none}
+.h1-sub{display:block;font-size:.55em;font-weight:700;margin-top:.35em;color:var(--on-deep)}
+.h1-sub em{color:var(--accent)}
+.visitors{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:8px 14px 8px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--deep-rule);backdrop-filter:blur(6px);font-size:13.5px;color:var(--on-deep-muted)}
+.visitors img{display:block;border-radius:4px}
+.visitors .live{width:9px;height:9px;border-radius:50%;background:#3aa76d;box-shadow:0 0 0 0 rgba(58,167,109,.6);animation:liveDot 2s infinite}
+@keyframes liveDot{70%{box-shadow:0 0 0 9px rgba(58,167,109,0)}100%{box-shadow:0 0 0 0 rgba(58,167,109,0)}}
+/* glass sheen on app window */
+.window{position:relative}
+.window::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.35) 48%,transparent 56%);transform:translateX(-100%);animation:sheen 7s 2s ease-in-out infinite;pointer-events:none}
+@keyframes sheen{0%,70%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+/* animated gradient border on visuals and custom block */
+@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+.visual,.any{isolation:isolate}
+.visual::after,.any::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--ang),transparent 0 60%,var(--accent) 75%,#7fd3a5 85%,transparent 95%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 6s linear infinite;pointer-events:none;z-index:2}
+@keyframes spin{to{--ang:360deg}}
+/* section heading gradient underline */
+.sec-head h2{background:linear-gradient(90deg,var(--ink),color-mix(in srgb,var(--ink) 70%,var(--accent)));-webkit-background-clip:text;background-clip:text;color:transparent}
+.contact .sec-head h2,.any h2{background:none;color:inherit}
+/* feature list icons pop */
+.flist li svg{background:color-mix(in srgb,#2f8a57 14%,transparent);border-radius:50%;padding:3px;width:24px;height:24px;margin-top:0}
+/* trust numbers gradient */
+.trust strong{background:linear-gradient(135deg,var(--ink),color-mix(in srgb,var(--ink) 55%,var(--accent)));-webkit-background-clip:text;background-clip:text;color:transparent}
+/* footer */
+footer .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1.2fr 1fr;gap:32px;padding-top:56px;padding-bottom:40px;border-top:0}
+@media (max-width:860px){footer .fgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){footer .fgrid{grid-template-columns:1fr}}
+footer .brand{color:var(--on-deep);margin-bottom:14px}
+footer p{font-size:14px;max-width:26em}
+footer h4{color:var(--on-deep);font:700 15px var(--display);margin:4px 0 12px}
+footer .fgrid a,footer .fgrid span{display:block;padding:3px 0;word-break:break-word}
+footer .fgrid a:hover{color:var(--accent)}
+footer .fvis{margin-bottom:8px}
+footer .fbottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;padding-bottom:24px;border-top:1px solid var(--deep-rule);font-size:13px}
+@media (prefers-reduced-motion: reduce){#heroDots{display:none}}
+
 /* floating whatsapp */
 .wa-float{position:fixed;right:20px;bottom:20px;z-index:30;display:flex;align-items:center;gap:10px;background:#25d366;color:#0b2b17;font-weight:600;font-size:15px;text-decoration:none;padding:13px 18px 13px 14px;border-radius:999px;box-shadow:0 14px 30px -10px rgba(0,0,0,.45);transition:transform .2s}
 .wa-float:hover{transform:translateY(-3px)}
@@ -443,10 +487,11 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
 <main id="top">
   <!-- HERO -->
   <div class="hero">
+    <canvas id="heroDots" aria-hidden="true"></canvas>
     <div class="wrap hero-grid">
       <div>
         <div class="badge"><span>New</span>Church Management System v3.1 is out</div>
-        <h1>Your records, organised. <em>No internet<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 80 4, 200 4, 297 12" fill="none" stroke="#e2a72a" stroke-width="5" stroke-linecap="round"/></svg></em> needed.</h1>
+        <h1>Smart offline software for <span class="rot-wrap"><em class="rot" id="rotWord">schools</em></span><span class="h1-sub">Your records, organised. <em>No internet<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 80 4, 200 4, 297 12" fill="none" stroke="#e2a72a" stroke-width="5" stroke-linecap="round"/></svg></em> needed.</span></h1>
         <p class="lede">Professional management software for schools, churches, coaching institutes and any organisation. It runs on your own computer, keeps your data private, and prints certificates and reports in seconds.</p>
         <div class="cta">
           <a class="btn solid" href="#contact">Start your 30-day free trial</a>
@@ -456,6 +501,10 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
           <div><svg><use href="#i-check"/></svg>Easy installation</div>
           <div><svg><use href="#i-check"/></svg>Windows &amp; Mac</div>
           <div><svg><use href="#i-check"/></svg>No monthly fee</div>
+        </div>
+        <div class="visitors" title="Total visits to this website">
+          <span class="live"></span><span class="vlabel">Website visitors</span>
+          <img id="hitsBadge" src="https://hits.sh/heginhaokip2234.github.io/HGsoftware.svg?style=flat-square&amp;label=visitors&amp;color=e2a72a&amp;labelColor=12352f" alt="Visitor count" height="20" loading="eager" onerror="this.closest('.visitors').style.display='none'">
         </div>
       </div>
 
@@ -774,7 +823,16 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
 </main>
 
 <footer>
-  <div class="wrap"><span>© 2026 Hegin Haokip · Software for schools, churches, institutes and any organisation</span><a href="#top">Back to top ↑</a></div>
+  <div class="wrap fgrid">
+    <div class="fbrand">
+      <a class="brand" href="#top"><span class="mark">H</span><span><b>Hegin Haokip</b><small>OFFLINE SOFTWARE</small></span></a>
+      <p>Offline management software for schools, churches, coaching institutes and any organisation.</p>
+    </div>
+    <div><h4>Software</h4><a href="#products">Church Management</a><a href="#products">School Management</a><a href="#products">Coaching Institute</a><a href="#custom">Custom software</a></div>
+    <div><h4>Contact</h4><a href="https://wa.me/919612338375">WhatsApp: +91 96123 38375</a><span>heginhaokip2234@gmail.com</span><a href="#contact">Get a free trial</a></div>
+    <div><h4>This website</h4><div class="fvis"><img onerror="this.parentNode.style.display='none'" src="https://hits.sh/heginhaokip2234.github.io/HGsoftware.svg?style=flat-square&amp;label=visitors&amp;color=e2a72a&amp;labelColor=12352f" alt="Visitor count" height="20"></div><a href="#top">Back to top ↑</a></div>
+  </div>
+  <div class="wrap fbottom"><span>© 2026 Hegin Haokip. All rights reserved.</span><span>Made in India</span></div>
 </footer>
 
 <a class="wa-float" href="https://wa.me/919612338375" aria-label="Chat on WhatsApp"><svg><use href="#i-wa"/></svg><span>Chat on WhatsApp</span></a>
@@ -884,6 +942,51 @@ header.top.scrolled{box-shadow:0 10px 30px -12px rgba(0,0,0,.45)}
       box.addEventListener('mouseleave', () => card.style.transform = '');
     });
   }
+})();
+</script>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // rotating word
+  const words = ['schools','churches','institutes','hostels','offices','businesses','NGOs'];
+  const el = document.getElementById('rotWord');
+  if (el && !reduce){
+    let i = 0;
+    setInterval(() => {
+      el.classList.add('out');
+      setTimeout(() => {
+        i = (i + 1) % words.length; el.textContent = words[i];
+        el.classList.remove('out'); el.classList.add('pre');
+        void el.offsetWidth; el.classList.remove('pre');
+      }, 350);
+    }, 2400);
+  }
+  // hide the visitor chip if the counter service can't be reached
+  // connected-dots background in hero
+  const cv = document.getElementById('heroDots');
+  if (!cv || reduce) return;
+  const ctx = cv.getContext('2d'); let W, H, pts = [], running = true, dpr = Math.min(devicePixelRatio || 1, 2);
+  function size(){
+    const r = cv.getBoundingClientRect(); W = r.width; H = r.height;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n = Math.round(Math.min(70, W * H / 16000));
+    pts = Array.from({length:n}, () => ({x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35, g:Math.random() < .18}));
+  }
+  function frame(){
+    if (!running) return;
+    ctx.clearRect(0,0,W,H);
+    for (const p of pts){ p.x += p.vx; p.y += p.vy; if (p.x<0||p.x>W) p.vx*=-1; if (p.y<0||p.y>H) p.vy*=-1; }
+    for (let a=0;a<pts.length;a++) for (let c=a+1;c<pts.length;c++){
+      const dx=pts[a].x-pts[c].x, dy=pts[a].y-pts[c].y, d=dx*dx+dy*dy;
+      if (d < 15000){ ctx.strokeStyle='rgba(166,188,178,'+(0.22*(1-d/15000))+')'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(pts[a].x,pts[a].y); ctx.lineTo(pts[c].x,pts[c].y); ctx.stroke(); }
+    }
+    for (const p of pts){ ctx.fillStyle = p.g ? 'rgba(226,167,42,.9)' : 'rgba(234,242,238,.55)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.g?2.2:1.5,0,7); ctx.fill(); }
+    requestAnimationFrame(frame);
+  }
+  size(); addEventListener('resize', size);
+  new IntersectionObserver(e => { const v = e[0].isIntersecting; if (v && !running){ running = true; frame(); } else if (!v) running = false; }).observe(cv);
+  frame();
 })();
 </script>
 </body>
