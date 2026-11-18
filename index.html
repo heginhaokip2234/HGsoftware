@@ -12,6 +12,7 @@
 <meta property="og:url" content="https://heginhaokipsoftware.in/">
 <link rel="canonical" href="https://heginhaokipsoftware.in/">
 <meta name="theme-color" content="#0b2420">
+<script>try{var c=document.createElement('canvas');if(c.getContext('webgl')||c.getContext('experimental-webgl'))document.documentElement.classList.add('webgl')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
@@ -487,6 +488,86 @@ a.badge:hover{border-color:var(--accent);background:rgba(226,167,42,.12)}
 .lightbox img{max-width:min(1400px,100%);max-height:88vh;border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.6);background:#fff}
 .lightbox p{color:#eaf2ee;text-align:center;margin-top:12px;font-size:15px}
 .lightbox .lb-x{position:absolute;top:16px;right:20px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font-size:22px;cursor:pointer}
+
+/* ================= 3D DESIGN ================= */
+/* hero: 3D scene + perspective floor */
+html,body{overflow-x:clip}
+.floor{position:absolute;left:-30%;right:-30%;bottom:0;height:60%;pointer-events:none;
+  background-image:linear-gradient(rgba(226,167,42,.20) 1px,transparent 1px),linear-gradient(90deg,rgba(226,167,42,.20) 1px,transparent 1px);
+  background-size:64px 64px;transform:perspective(380px) rotateX(70deg);transform-origin:50% 100%;
+  -webkit-mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,.6) 35%,transparent 85%);mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,.6) 35%,transparent 85%);
+  animation:floorMove 2.6s linear infinite}
+@keyframes floorMove{to{background-position:0 64px,0 0}}
+.hero-visual{position:relative;min-width:0}
+.scene3d{display:none;position:relative;height:640px;margin:-60px -60px -70px -50px}
+.scene3d canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.scene3d canvas:active{cursor:grabbing}
+.scene3d .hint{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);font-size:12.5px;color:var(--on-deep-muted);background:rgba(11,36,32,.55);border:1px solid var(--deep-rule);padding:6px 14px;border-radius:999px;white-space:nowrap;backdrop-filter:blur(6px);pointer-events:none;animation:hintFade 6s 3s both}
+@keyframes hintFade{0%,80%{opacity:1}100%{opacity:.0}}
+.webgl .scene3d{display:block}
+.webgl .hero .stage{display:none}
+@media (max-width:980px){.scene3d{height:440px;margin:-20px -16px -30px}}
+@media (max-width:480px){.scene3d{height:360px}}
+.hero h1{text-shadow:0 1px 0 rgba(0,0,0,.28),0 2px 0 rgba(0,0,0,.22),0 3px 0 rgba(0,0,0,.16),0 14px 34px rgba(0,0,0,.4)}
+.hero h1 .rot{text-shadow:none;filter:drop-shadow(0 3px 0 rgba(0,0,0,.25))}
+.hero h1 .rot.out,.hero h1 .rot.pre{filter:blur(4px)}
+
+/* 3D coverflow screenshot sliders */
+.shots-wrap{padding:30px 0 44px;overflow:hidden}
+.shots{--sw:72%}
+.shots-frame{position:relative;perspective:1500px;overflow:visible;background:none;box-shadow:none;border-radius:0}
+.shots-frame::before{content:"";display:block;padding-top:calc(var(--sw) / var(--ar,1.6))}
+.shots-track{position:absolute;inset:0;display:block;transform-style:preserve-3d;transition:none}
+.shot{position:absolute;top:0;left:calc((100% - var(--sw)) / 2);width:var(--sw);margin:0;border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;
+  box-shadow:0 30px 60px -22px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.1);
+  transition:transform .8s cubic-bezier(.2,.75,.2,1),opacity .8s ease,filter .8s ease;will-change:transform;
+  -webkit-box-reflect:below 6px linear-gradient(transparent 72%,rgba(255,255,255,.16))}
+.shot img{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.shot.center{cursor:zoom-in}
+.shots-frame .sh-btn{z-index:30}
+.sh-prev{left:6px}.sh-next{right:6px}
+.shots-frame .sh-zoom{z-index:30;right:calc((100% - var(--sw)) / 2 + 10px);opacity:.85}
+.sh-bar,.sh-dots{padding:0 26px}
+.sh-bar{margin-top:26px}
+@media (max-width:520px){.shots{--sw:84%}.sh-bar,.sh-dots{padding:0 14px}}
+
+/* 3D scroll reveals */
+.reveal{transform:perspective(1100px) rotateX(16deg) translateY(56px) scale(.97);transform-origin:50% 100%}
+.product > div.reveal:first-child{transform:perspective(1200px) rotateY(16deg) translateX(-50px);transform-origin:0 50%}
+.product > div.reveal:last-child{transform:perspective(1200px) rotateY(-16deg) translateX(50px);transform-origin:100% 50%}
+.reveal.in,.product > div.reveal.in{transform:none}
+
+/* 3D tilt cards with glare */
+.t3d{position:relative;transform-style:preserve-3d;will-change:transform}
+.t3d .glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;z-index:3}
+.t3d.tilting{transition:transform .12s ease-out!important;transition-delay:0s!important}
+.t3d.settle{transition:transform .6s cubic-bezier(.2,.7,.2,1)!important;transition-delay:0s!important}
+.t3d .ring,.t3d .ini{transform:translateZ(36px)}
+.t3d h3,.t3d b{transform:translateZ(22px)}
+.why article{transform-style:preserve-3d}
+
+/* steps: coins flip into place */
+.steps.reveal.in .num{animation:coin 1.1s cubic-bezier(.2,.8,.2,1) both}
+.steps.reveal.in .step:nth-child(2) .num{animation-delay:.3s}
+.steps.reveal.in .step:nth-child(3) .num{animation-delay:.6s}
+.steps.reveal.in .step:nth-child(4) .num{animation-delay:.9s}
+@keyframes coin{from{transform:perspective(400px) rotateY(-540deg) scale(.3);opacity:0}to{transform:none;opacity:1}}
+.step .num{box-shadow:0 6px 0 -1px color-mix(in srgb,var(--ink) 35%,transparent),0 14px 24px -10px rgba(0,0,0,.35)}
+
+/* trust icons flip on hover */
+.trust .ring{transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.trust .t:hover .ring{transform:perspective(300px) rotateY(180deg)}
+.trust .ring svg{backface-visibility:visible}
+
+/* custom block floats in 3D */
+.any{transform-style:preserve-3d}
+.orgs li{transform-style:preserve-3d}
+
+@media (prefers-reduced-motion: reduce){
+  .floor{animation:none}
+  .reveal,.product > div.reveal:first-child,.product > div.reveal:last-child{transform:none}
+  .shot{transition:none}
+}
 </style>
 </head>
 <body>
@@ -523,6 +604,7 @@ a.badge:hover{border-color:var(--accent);background:rgba(226,167,42,.12)}
   <!-- HERO -->
   <div class="hero">
     <canvas id="heroDots" aria-hidden="true"></canvas>
+    <div class="floor" aria-hidden="true"></div>
     <div class="wrap hero-grid">
       <div>
         <a class="badge" href="#village"><span>New</span>Village Members Management System is out →</a>
@@ -543,6 +625,11 @@ a.badge:hover{border-color:var(--accent);background:rgba(226,167,42,.12)}
         </div>
       </div>
 
+      <div class="hero-visual">
+      <div class="scene3d" id="scene3d" aria-label="3D preview of the School and Village software">
+        <canvas id="c3d"></canvas>
+        <div class="hint">Drag to turn · tap a floating page</div>
+      </div>
       <div class="stage" aria-label="Example screens from the Church Management System">
         <div class="window">
           <div class="titlebar"><i></i><i></i><i></i><span>Church Management System</span><span class="pill">Trial · 30 days left</span></div>
@@ -582,6 +669,7 @@ a.badge:hover{border-color:var(--accent);background:rgba(226,167,42,.12)}
           <div class="fl"><span>Reg. no</span><b class="mono">B-0087</b></div>
           <div class="sig"><span>Pastor</span><span>Secretary</span></div>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -1038,39 +1126,240 @@ a.badge:hover{border-color:var(--accent);background:rgba(226,167,42,.12)}
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const lb = document.getElementById('lightbox'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
-  function openLB(img, cap){ lbImg.src = img.src; lbImg.alt = img.alt; lbCap.textContent = cap; lb.classList.add('open'); lb.querySelector('.lb-x').focus(); }
+  function openLB(src, alt, cap){ lbImg.src = src; lbImg.alt = alt; lbCap.textContent = cap; lb.classList.add('open'); lb.querySelector('.lb-x').focus(); }
+  window.openShot = openLB;
   function closeLB(){ lb.classList.remove('open'); }
   lb.addEventListener('click', closeLB);
   addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
 
   document.querySelectorAll('[data-slider]').forEach(sl => {
-    const track = sl.querySelector('.shots-track'), shots = [...track.children];
+    const frame = sl.querySelector('.shots-frame'), track = sl.querySelector('.shots-track'), shots = [...track.children];
     const caps = sl.dataset.caps.split('|'), capEl = sl.querySelector('.sh-cap'), cnt = sl.querySelector('.sh-count');
-    const dotsBox = sl.querySelector('.sh-dots'); let i = 0, timer = null;
+    const dotsBox = sl.querySelector('.sh-dots'); let i = 0, timer = null, moved = false;
+    // frame height follows the screenshots' shape
+    const first = shots[0].querySelector('img');
+    function setAR(){ if (first.naturalWidth) sl.style.setProperty('--ar', (first.naturalWidth / first.naturalHeight).toFixed(3)); }
+    first.complete ? setAR() : first.addEventListener('load', setAR);
     const dots = shots.map((_, k) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role','tab'); b.setAttribute('aria-label', 'Screenshot ' + (k+1) + ': ' + caps[k]); b.onclick = () => { go(k); restart(); }; dotsBox.appendChild(b); return b; });
+    function place(){
+      const n = shots.length;
+      shots.forEach((s, k) => {
+        let d = k - i; if (d > n/2) d -= n; if (d < -n/2) d += n;
+        const a = Math.abs(d), sg = Math.sign(d);
+        let t, o;
+        if (a === 0){ t = 'translate3d(0,0,0) rotateY(0deg)'; o = 1; }
+        else if (a === 1){ t = 'translate3d(' + (sg*46) + '%,0,-260px) rotateY(' + (-sg*42) + 'deg)'; o = .8; }
+        else if (a === 2){ t = 'translate3d(' + (sg*78) + '%,0,-520px) rotateY(' + (-sg*52) + 'deg)'; o = .4; }
+        else { t = 'translate3d(' + (sg*96) + '%,0,-760px) rotateY(' + (-sg*58) + 'deg)'; o = 0; }
+        s.style.transform = t; s.style.opacity = o; s.style.zIndex = 20 - a;
+        s.style.filter = a ? 'brightness(' + (1 - a*.18) + ')' : 'none';
+        s.style.pointerEvents = a > 2 ? 'none' : '';
+        s.classList.toggle('center', a === 0);
+        s.setAttribute('aria-hidden', a !== 0);
+      });
+    }
     function go(k){
-      i = (k + shots.length) % shots.length;
-      track.style.transform = 'translateX(' + (-100 * i) + '%)';
+      i = (k + shots.length) % shots.length; place();
       capEl.textContent = caps[i]; cnt.textContent = (i + 1) + ' / ' + shots.length;
       dots.forEach((d, n) => d.setAttribute('aria-selected', n === i));
-      shots.forEach((s, n) => s.setAttribute('aria-hidden', n !== i));
     }
     function stop(){ clearInterval(timer); timer = null; }
     function restart(){ stop(); if (!reduce) timer = setInterval(() => { if (!document.hidden && !lb.classList.contains('open')) go(i + 1); }, 4200); }
     sl.querySelector('.sh-prev').onclick = () => { go(i - 1); restart(); };
     sl.querySelector('.sh-next').onclick = () => { go(i + 1); restart(); };
-    sl.querySelector('.sh-zoom').onclick = () => openLB(shots[i].querySelector('img'), caps[i]);
-    shots.forEach((s, n) => s.addEventListener('click', () => { if (!moved) openLB(s.querySelector('img'), caps[n]); }));
+    sl.querySelector('.sh-zoom').onclick = () => { const im = shots[i].querySelector('img'); openLB(im.src, im.alt, caps[i]); };
+    shots.forEach((s, n) => s.addEventListener('click', () => {
+      if (moved) return;
+      if (n === i){ const im = s.querySelector('img'); openLB(im.src, im.alt, caps[n]); }
+      else { go(n); restart(); }
+    }));
     sl.addEventListener('mouseenter', stop); sl.addEventListener('mouseleave', restart);
     sl.addEventListener('focusin', stop);
-    // swipe
-    let x0 = null, moved = false;
-    track.addEventListener('pointerdown', e => { x0 = e.clientX; moved = false; });
-    track.addEventListener('pointermove', e => { if (x0 !== null && Math.abs(e.clientX - x0) > 8) moved = true; });
-    track.addEventListener('pointerup', e => { if (x0 === null) return; const dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40){ go(i + (dx < 0 ? 1 : -1)); restart(); } setTimeout(() => moved = false, 0); });
+    let x0 = null;
+    frame.addEventListener('pointerdown', e => { x0 = e.clientX; moved = false; });
+    frame.addEventListener('pointermove', e => { if (x0 !== null && Math.abs(e.clientX - x0) > 8) moved = true; });
+    frame.addEventListener('pointerup', e => { if (x0 === null) return; const dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40){ go(i + (dx < 0 ? 1 : -1)); restart(); } setTimeout(() => moved = false, 0); });
     sl.addEventListener('keydown', e => { if (e.key === 'ArrowRight'){ go(i+1); restart(); } if (e.key === 'ArrowLeft'){ go(i-1); restart(); } });
     go(0); restart();
   });
+
+  // 3D tilt + glare on cards (mouse only)
+  if (!reduce && matchMedia('(hover: hover)').matches){
+    document.querySelectorAll('.why article, .client, .orgs li, .faq details').forEach(el => {
+      el.classList.add('t3d');
+      const g = document.createElement('span'); g.className = 'glare'; el.appendChild(g);
+      let raf = 0;
+      el.addEventListener('pointermove', e => {
+        if (e.pointerType !== 'mouse') return;
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+          const k = el.matches('.faq details') ? 4 : 11;
+          el.classList.remove('settle'); el.classList.add('tilting');
+          el.style.transform = 'perspective(900px) rotateX(' + ((.5 - y) * k) + 'deg) rotateY(' + ((x - .5) * k * 1.2) + 'deg) translateZ(8px)';
+          g.style.background = 'radial-gradient(circle at ' + (x*100) + '% ' + (y*100) + '%, rgba(255,255,255,.32), transparent 55%)';
+          g.style.opacity = 1;
+        });
+      });
+      el.addEventListener('pointerleave', () => { cancelAnimationFrame(raf); el.classList.remove('tilting'); el.classList.add('settle'); el.style.transform = ''; g.style.opacity = 0; });
+    });
+  }
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onerror="document.documentElement.classList.remove('webgl')"></script>
+<script>
+(function(){
+  const root = document.documentElement, box = document.getElementById('scene3d'), cv = document.getElementById('c3d');
+  if (!box || !window.THREE || !root.classList.contains('webgl')){ root.classList.remove('webgl'); return; }
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({canvas: cv, antialias: true, alpha: true}); }
+  catch(e){ root.classList.remove('webgl'); return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(34, 1, .1, 100);
+  scene.add(new THREE.AmbientLight(0xffffff, .7));
+  const key = new THREE.DirectionalLight(0xffffff, .9); key.position.set(3, 5, 7); scene.add(key);
+  const goldL = new THREE.PointLight(0xe2a72a, 1.6, 22); goldL.position.set(-4, -1.5, 4); scene.add(goldL);
+  const greenL = new THREE.PointLight(0x3aa76d, 1.1, 20); greenL.position.set(4, 2.5, 2); scene.add(greenL);
+
+  const world = new THREE.Group(); scene.add(world);
+  let dirty = true;
+  const loader = new THREE.TextureLoader();
+  const maxAniso = renderer.capabilities.getMaxAnisotropy();
+  function tex(src){ const t = loader.load(src, () => { dirty = true; }); t.encoding = THREE.sRGBEncoding; t.anisotropy = maxAniso; return t; }
+
+  // screenshots already on the page
+  const all = [...document.querySelectorAll('.shots img')].map(im => ({src: im.src, alt: im.alt}));
+  const pick = (word, fb) => all.find(a => a.alt.toLowerCase().includes(word)) || all[fb] || all[0];
+  if (!all.length){ root.classList.remove('webgl'); return; }
+  const screens = [pick('dashboard: students', 1), pick('village statistics', 10), pick('household', 11), pick('timetable', 4), pick('village fund', 14)];
+  const floaters = [pick('certificates printed', 5), pick('id cards', 6), pick('fee receipt, shareable', 3), pick('family tree', 13), pick('18 ready', 15)];
+
+  // ---- monitor ----
+  const monitor = new THREE.Group(); world.add(monitor);
+  const SW = 4.3, SH = 2.62;
+  const bodyMat = new THREE.MeshStandardMaterial({color: 0x0b2420, metalness: .45, roughness: .35});
+  const body = new THREE.Mesh(new THREE.BoxGeometry(SW + .24, SH + .24, .18), bodyMat); body.position.z = -.1; monitor.add(body);
+  const back = new THREE.Mesh(new THREE.BoxGeometry(SW * .7, SH * .62, .22), bodyMat); back.position.z = -.28; monitor.add(back);
+  const rim = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(SW + .24, SH + .24, .18)), new THREE.LineBasicMaterial({color: 0xe2a72a, transparent: true, opacity: .55}));
+  rim.position.z = -.1; monitor.add(rim);
+  const matA = new THREE.MeshBasicMaterial({map: tex(screens[0].src), toneMapped: false});
+  const matB = new THREE.MeshBasicMaterial({map: tex(screens[1].src), toneMapped: false, transparent: true, opacity: 0});
+  const scrA = new THREE.Mesh(new THREE.PlaneGeometry(SW, SH), matA); scrA.position.z = .002; monitor.add(scrA);
+  const scrB = new THREE.Mesh(new THREE.PlaneGeometry(SW, SH), matB); scrB.position.z = .004; monitor.add(scrB);
+  const neck = new THREE.Mesh(new THREE.BoxGeometry(.38, 1.0, .14), bodyMat); neck.position.set(0, -(SH/2 + .5), -.22); monitor.add(neck);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.1, .09, 64), bodyMat); base.scale.z = .5; base.position.set(0, -(SH/2 + 1.0), -.2); monitor.add(base);
+  const baseRim = new THREE.Mesh(new THREE.TorusGeometry(1.05, .015, 8, 80), new THREE.MeshBasicMaterial({color: 0xe2a72a}));
+  baseRim.rotation.x = Math.PI/2; baseRim.scale.y = .5; baseRim.position.copy(base.position); baseRim.position.y += .05; monitor.add(baseRim);
+  monitor.position.y = .35;
+
+  // ---- floating pages ----
+  const cards = [];
+  const spots = [[-2.55, 1.55, 1.1, .32], [2.6, 1.45, 1.3, -.34], [-2.75, -.95, 1.6, .38], [2.7, -1.05, 1.0, -.3], [0, -2.2, 2.0, 0]];
+  const sideMat = new THREE.MeshStandardMaterial({color: 0xf3f5f2, roughness: .6});
+  floaters.forEach((f, k) => {
+    if (!f) return;
+    const w = k === 4 ? 1.55 : 1.45, h = w / 1.62;
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, .035), [sideMat, sideMat, sideMat, sideMat, new THREE.MeshBasicMaterial({map: tex(f.src), toneMapped: false}), sideMat]);
+    const [x, y, z, ry] = spots[k];
+    m.userData = {x, y, z, ry, ph: k * 1.37, src: f.src, alt: f.alt};
+    m.position.set(x, y, z); m.rotation.y = ry;
+    const edge = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({color: 0xe2a72a, transparent: true, opacity: .7}));
+    m.add(edge);
+    world.add(m); cards.push(m);
+  });
+
+  // ---- rings + particles ----
+  const ringMat = new THREE.MeshBasicMaterial({color: 0xe2a72a, transparent: true, opacity: .55});
+  const ring1 = new THREE.Mesh(new THREE.TorusGeometry(3.4, .012, 8, 200), ringMat); ring1.position.z = -1.6; world.add(ring1);
+  const ring2 = new THREE.Mesh(new THREE.TorusGeometry(3.9, .008, 8, 200), new THREE.MeshBasicMaterial({color: 0x7fd3a5, transparent: true, opacity: .35})); ring2.position.z = -1.8; world.add(ring2);
+  const orb = new THREE.Mesh(new THREE.SphereGeometry(.09, 24, 24), new THREE.MeshBasicMaterial({color: 0xf6c453})); world.add(orb);
+  function dots(n, color, size, r){
+    const g = new THREE.BufferGeometry(), p = new Float32Array(n * 3);
+    for (let k = 0; k < n; k++){ const a = Math.random() * Math.PI * 2, b = Math.acos(2 * Math.random() - 1), rr = r * (.55 + Math.random() * .45);
+      p[k*3] = rr * Math.sin(b) * Math.cos(a); p[k*3+1] = rr * Math.sin(b) * Math.sin(a) * .7; p[k*3+2] = rr * Math.cos(b) - 2; }
+    g.setAttribute('position', new THREE.BufferAttribute(p, 3));
+    return new THREE.Points(g, new THREE.PointsMaterial({color, size, transparent: true, opacity: .85, depthWrite: false}));
+  }
+  const dustA = dots(220, 0xe2a72a, .045, 7), dustB = dots(160, 0xeaf2ee, .03, 8); world.add(dustA, dustB);
+
+  // ---- sizing ----
+  function resize(){
+    const w = box.clientWidth, h = box.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    camera.position.z = w / h < 1.05 ? 12.4 / Math.max(w / h, .6) * .92 : 12.2;
+    world.position.x = w / h > 1.05 ? .45 : 0;
+    camera.updateProjectionMatrix(); dirty = true;
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(box); else addEventListener('resize', resize);
+  resize();
+
+  // ---- interaction ----
+  let mx = 0, my = 0, drag = 0, dragV = 0, down = null;
+  addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
+    if (down !== null){ const dx = e.clientX - down; down = e.clientX; dragV = dx * .006; drag += dragV; } });
+  cv.addEventListener('pointerdown', e => { down = e.clientX; downX = e.clientX; downY = e.clientY; });
+  addEventListener('pointerup', () => { down = null; });
+  let downX = 0, downY = 0;
+  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  function hit(e){ const r = cv.getBoundingClientRect(); ptr.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1); ray.setFromCamera(ptr, camera); return ray.intersectObjects(cards, false)[0]; }
+  cv.addEventListener('click', e => {
+    if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return;
+    const h = hit(e); if (h && window.openShot) window.openShot(h.object.userData.src, h.object.userData.alt, h.object.userData.alt);
+  });
+  cv.addEventListener('mousemove', e => { cv.style.cursor = hit(e) ? 'pointer' : ''; });
+
+  // ---- loop ----
+  let visible = true, t0 = performance.now(), last = t0, swapAt = 4.5, fade = -1, si = 0;
+  const ease = x => 1 - Math.pow(1 - Math.min(Math.max(x, 0), 1), 3);
+  function frame(now){
+    if (!visible){ requestAnimationFrame(frame); return; }
+    const t = (now - t0) / 1000;
+    const intro = reduce ? 1 : ease(t / 1.8);
+    // intro: monitor swings in
+    monitor.rotation.y = -0.22 + (1 - intro) * -1.4;
+    monitor.scale.setScalar(.55 + .45 * intro);
+    // scroll: tilt away as hero leaves
+    const hr = box.getBoundingClientRect(), sc = Math.min(Math.max(-hr.top / (hr.height || 1), 0), 1);
+    if (!reduce){
+      dragV *= .94; if (down === null) drag *= .985;
+      world.rotation.y += ((mx * .45 + drag) - world.rotation.y) * .06;
+      world.rotation.x += ((my * .22 + sc * .55) - world.rotation.x) * .06;
+      world.position.y = sc * 1.4;
+      monitor.position.y = .35 + Math.sin(t * .8) * .06;
+      cards.forEach(c => { const u = c.userData;
+        c.position.y = u.y + Math.sin(t * .9 + u.ph) * .14;
+        c.position.x = u.x * (.6 + .4 * intro);
+        c.rotation.y = u.ry + Math.sin(t * .5 + u.ph) * .22;
+        c.rotation.x = Math.sin(t * .7 + u.ph) * .08;
+        c.scale.setScalar(intro); });
+      ring1.rotation.z = t * .12; ring1.rotation.x = Math.sin(t * .3) * .25;
+      ring2.rotation.z = -t * .08; ring2.rotation.y = Math.sin(t * .25) * .3;
+      orb.position.set(Math.cos(t * .6) * 3.4, Math.sin(t * .6) * 3.4 * Math.cos(ring1.rotation.x), -1.6);
+      dustA.rotation.y = t * .03; dustB.rotation.y = -t * .02;
+      goldL.position.x = Math.cos(t * .5) * 4; greenL.position.y = 2.5 + Math.sin(t * .4);
+      // screen slideshow with cross-fade
+      if (t > swapAt && fade < 0){ fade = t; }
+      if (fade >= 0){
+        const f = Math.min((t - fade) / .9, 1); matB.opacity = f;
+        if (f >= 1){ si = (si + 1) % screens.length; matA.map = matB.map; matA.needsUpdate = true; matB.opacity = 0;
+          matB.map = tex(screens[(si + 1) % screens.length].src); matB.needsUpdate = true; fade = -1; swapAt = t + 4; }
+      }
+      dirty = true;
+    } else {
+      cards.forEach(c => c.scale.setScalar(1));
+    }
+    camera.lookAt(0, 0, 0);
+    if (dirty){ renderer.render(scene, camera); dirty = false; }
+    requestAnimationFrame(frame);
+  }
+  if ('IntersectionObserver' in window) new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(box);
+  document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
+  requestAnimationFrame(frame);
 })();
 </script>
 </body>
